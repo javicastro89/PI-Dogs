@@ -9,15 +9,15 @@ module.exports = (sequelize) => {
       allowNull: false,
     },
     height: {
-      type: DataTypes.FLOAT,
+      type: DataTypes.STRING,
       allowNull: false
     },
     weight: {
-      type: DataTypes.FLOAT,
+      type: DataTypes.STRING,
       allowNull: false
     },
-    years: {
-      type: DataTypes.INTEGER
+    life_span: {
+      type: DataTypes.STRING
     }
   });
   sequelize.define('Temperament', {
