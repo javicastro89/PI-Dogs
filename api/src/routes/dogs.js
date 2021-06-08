@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const axios = require('axios').default;
-const { Breed, Temperament } = require('../db')
+const { Breed, Temperament, Breed_Temperament } = require('../db')
 const { API_KEY } = process.env
 const { Op } = require('sequelize')
 
@@ -20,10 +20,46 @@ router.get('/dogs', (req, res) => {
                 if (remoteBreeds.length > 0) {
                     if (remoteBreeds.length < 8) {
                         Breed.findAll({ where: { name: { [Op.iLike]: `%${name}%` } } })
-                            .then((result) => {
-                                console.log(result, 'A ver que onda')
+                            .then(async (result) => {
                                 if (result) {
-                                    let dogs = [...remoteBreeds, ...result].slice(0, 8).map(dog => {
+                                    let internalTemp = []
+                                    // console.log('Falla en la función?')
+
+                                    for (let i of result) {
+                                        let fullTemp = await Breed_Temperament.findAll({ where: { BreedId: i.id } })
+                                        // console.log('Llegamos acá ?')
+                                        // console.log('Acaaaaaa', fullTemp[0].dataValues.TemperamentId )
+                                        let onlyTempId = fullTemp.map(e => {
+                                            return e.dataValues.TemperamentId
+                                        })
+                                        let dogTemp = []
+                                        for (let j of onlyTempId) {
+                                            // console.log(j)
+                                            dogTemp.push(await Temperament.findOne({ where: {id: j}}))
+                                        }
+                                       
+                                        let onlyTempName = dogTemp.map(e => {
+                                            return e.dataValues.name
+                                        })
+                                        internalTemp.push({name: i.name, temp: onlyTempName})
+                                    }
+                                    
+                                    let dogInt = result.map(dog => {
+                                        for(let i of internalTemp) {
+                                            if (i.name === dog.name) {
+                                                return {
+                                                    name: dog.name,
+                                                    temperament: i.temp.join(', '),
+                                                    height: dog.height,
+                                                    weight: dog.weight,
+                                                    life_span: dog.life_span
+                                                }
+
+                                            }
+                                        }
+                                    })
+                                    
+                                    let dogsExt = [...remoteBreeds].map(dog => {
                                         return {
                                             name: dog.name,
                                             temperament: dog.temperament,
@@ -33,7 +69,9 @@ router.get('/dogs', (req, res) => {
                                             life_span: dog.life_span
                                         }
                                     })
-                                    return res.json(dogs)
+                                    
+                                    return res.json([...dogsExt, ...dogInt].slice(0, 8))
+                                    
                                 } else {
 
                                     let dogs = [...remoteBreeds].slice(0, 8).map(dog => {
