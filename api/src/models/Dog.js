@@ -18,6 +18,12 @@ module.exports = (sequelize) => {
     },
     life_span: {
       type: DataTypes.STRING
+    },
+    description: {
+      type: DataTypes.STRING,
+    },
+    image: {
+      type: DataTypes.STRING
     }
   });
   sequelize.define('Temperament', {

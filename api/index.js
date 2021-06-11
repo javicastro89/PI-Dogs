@@ -61,7 +61,7 @@ conn.sync({ force: true }).then(() => {
             })
 
           } catch (e) {
-            console.log('Ups!')
+            console.log('No se creó el temperamento')
           }
         })
 
@@ -69,6 +69,6 @@ conn.sync({ force: true }).then(() => {
 
       })
 
-      .catch(err => { console.log('Ups!') })
+      .catch(err => { console.log('No se cargaron los Temperamentos') })
   });
 });
