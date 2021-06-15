@@ -1,4 +1,4 @@
-import { GET_BREEDS, GET_BREED_DETAIL, ADD_BREED, GET_TEMPERAMENT } from './actions'
+import { GET_BREEDS, GET_BREED_DETAIL, ADD_BREED, GET_TEMPERAMENT, SEARCH_BREEDS } from './actions'
 import axios from 'axios'
 
 
@@ -38,6 +38,16 @@ export function getTemperament() {
         axios.get('http://localhost:3001/temperament')
         .then(result => dispatch({
             type: GET_TEMPERAMENT,
+            payload: result.data
+        }))
+    }
+}
+
+export function searchBreeds(name){
+    return function(dispatch) {
+        axios.get(`http://localhost:3001/dogs?name=${name}`)
+        .then(result => dispatch({
+            type: SEARCH_BREEDS,
             payload: result.data
         }))
     }

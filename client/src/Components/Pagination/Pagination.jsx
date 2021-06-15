@@ -12,12 +12,7 @@ function Pagination({breedsPerPage, TotalBreeds, paginate}) {
         <nav>
             <ul>
                 {pageNumber.map(number => 
-                    // <li key={number}>
-                    //     <a href='/home' value={number} onClick={paginate}>
-                    //         {number}
-                    //     </a>
-                    // </li>
-                    <button key={number} value={number} onClick={paginate}>{number}</button>
+                     <button key={number} value={number} onClick={paginate}>{number}</button>
                 )}
             </ul>
         </nav>

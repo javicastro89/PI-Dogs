@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getTemperament, addBreed, getBreeds } from "../../Actions/index";
 
+
 function Create() {
   const dispatch = useDispatch();
   let stateTemp = useSelector((state) => state.temperament);
@@ -31,8 +32,7 @@ function Create() {
     } else if (event.target.name === "temperament") {
       setTemp(event.target.value);
     }
-};
-
+  };
 
   const handleTemp = (event) => {
     event.preventDefault();
@@ -43,19 +43,16 @@ function Create() {
           temperament: [...input.temperament, temp],
         });
         setTemp("Active");
-        
       }
     }
   };
 
   const eraseTemp = (event) => {
     event.preventDefault();
-    console.log(event);
-    let temp = input.temperament.filter((e) => e !== event.target.value);
-    console.log(temp);
+    let localTemp = input.temperament.filter((e) => e !== event.target.value);
     setInput({
       ...input,
-      temperament: temp,
+      temperament: localTemp,
     });
   };
 
@@ -76,7 +73,7 @@ function Create() {
         height: "",
         life_span: "",
         description: "",
-      })
+      });
     }
     let newBreed = stateBreeds[0];
     return <h1>{newBreed.name}</h1>;
@@ -98,17 +95,9 @@ function Create() {
       <div>
         <label>Temperamento: </label>
         {Array.isArray(stateTemp) ? (
-          <select
-            name="temperament"
-            onChange={handleInput}
-            value={temp}
-          >
+          <select name="temperament" onChange={handleInput} value={temp}>
             {stateTemp.map((e) => (
-              <option
-                name="temperament"
-                key={e.name}
-                onChange={handleInput}
-              >
+              <option name="temperament" key={e.id} onChange={handleInput}>
                 {e.name}
               </option>
             ))}
@@ -171,15 +160,7 @@ function Create() {
           name="description"
           onChange={handleInput}
         />
-        {/* <input 
-        type='number'
-        name='life_span'
-        placeholder='Años...'
-        value={input.life_span}
-        onChange={handleInput}
-        /> */}
       </div>
-
       <input type="submit" value="Crear" />
     </form>
   );

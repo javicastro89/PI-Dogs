@@ -18,7 +18,6 @@ function App() {
       <Route path='/home' component={Home} />
       <Route path='/create' exact component={Create} />
       <Route path='/detail' exact component={Detail} />
-      {/* <h1>Henry Dogs</h1> */}
     </div>
   );
 }

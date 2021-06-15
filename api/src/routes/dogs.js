@@ -8,22 +8,38 @@ const { Op } = require('sequelize')
 router.get('/dogs', (req, res) => {
 
     const { name } = req.query
-    let remoteBreeds;
+    let remoteBreeds = []
 
     // Verifico si hay busqueda por query
     if (name) {
 
         axios.get(`https://api.thedogapi.com/v1/breeds/search?api_key=${API_KEY}&q=${name}`)
-            .then(result => {
-                remoteBreeds = result.data
+            .then(async result => {
+                remoteBreedsWhitoutImage = result.data
 
+                let remoteBreedsForImage = await axios.get('https://api.thedogapi.com/v1/breeds')
+
+                for(let i of remoteBreedsWhitoutImage) {
+                    for(let j = 0; j < remoteBreedsForImage.data.length; j++) {
+                        
+                        if(remoteBreedsForImage.data[j].name === i.name) {
+                            i.image = remoteBreedsForImage.data[j].image
+                            remoteBreeds.push(i)
+
+                        }
+
+                    }
+                    
+                }
+               
                 if (remoteBreeds.length > 0) {
-                    // if (remoteBreeds.length < 8) {
+                    
                     Breed.findAll({ where: { name: { [Op.iLike]: `%${name}%` } } })
-                        .then(async (result) => {
-                            if (result) {
+                    .then(async (result) => {
+                        
+                            if (result.length > 0) {
                                 let internalTemp = []
-
+                                
                                 for (let i of result) {
                                     let fullTemp = await Breed_Temperament.findAll({ where: { BreedId: i.id } })
 
@@ -58,7 +74,7 @@ router.get('/dogs', (req, res) => {
                                         }
                                     }
                                 })
-
+                                
                                 let dogsExt = remoteBreeds.map(dog => {
                                     return {
                                         name: dog.name,
@@ -74,8 +90,9 @@ router.get('/dogs', (req, res) => {
                                 return res.json([...dogInt, ...dogsExt])
 
                             } else {
-
+                                
                                 let dogs = remoteBreeds.map(dog => {
+                                    
                                     return {
                                         name: dog.name,
                                         temperament: dog.temperament,
@@ -86,25 +103,11 @@ router.get('/dogs', (req, res) => {
                                         id: dog.id
                                     }
                                 })
+                                
                                 return res.json(dogs)
                             }
                         })
-                        .catch((err) => res.status(500).json({ error: 'Error en la búsqueda en la BD' }))
-
-                    // } else {
-                    //     let dogs = [...remoteBreeds].slice(0, 8).map(dog => {
-                    //         return {
-                    //             name: dog.name,
-                    //             temperament: dog.temperament,
-                    //             image: dog.image,
-                    //             height: dog.height.metric,
-                    //             weight: dog.weight.metric,
-                    //             life_span: dog.life_span
-                    //         }
-                    //     })
-                    //     return res.json(dogs)
-                    // }
-
+                        .catch((err) => res.status(500).json({ error: 'Error en la búsqueda' }))
 
                 } else {
                     Breed.findAll({ where: { name: { [Op.iLike]: `%${name}%` } } })
