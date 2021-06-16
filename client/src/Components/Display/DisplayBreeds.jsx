@@ -1,9 +1,9 @@
 import React from "react";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 import Pagination from "../Pagination/Pagination";
 
-function DisplayBreeds({ pagesVisited, breedsPerPage, paginate }) {
-  const breeds = useSelector((state) => state.breeds);
+function DisplayBreeds({ pagesVisited, breedsPerPage, paginate, breeds }) {
+  // const breeds = useSelector((state) => state.breeds);
 
   return (
     <div>

@@ -16,7 +16,7 @@ function Filter({ setIsFiltered, isFiltered }) {
 
   function filterByTemperament(tempFilter) {
     if(tempFilter.length === 0) {
-      return breeds
+      return false
     }
 
     if (breeds.length > 0) {
@@ -75,11 +75,20 @@ function Filter({ setIsFiltered, isFiltered }) {
         });
       }
 
-    } else {
-      setIsFiltered({
-        filter: false,
-        arrayFilter: []
-      });
+    } 
+    else if (event.target.name === 'breed') {
+      let flag = filterByTemperament(tempFilter)
+      if (!flag) {
+        setIsFiltered({
+          filter: false,
+          arrayFilter: []
+        });
+      } else {
+        setIsFiltered({
+          filter: true,
+          arrayFilter: flag
+        });
+      }
     }
   }
 
@@ -100,7 +109,7 @@ function Filter({ setIsFiltered, isFiltered }) {
     let intermediate = tempFilter.filter(e => e !== event.target.value)
     setTempFilter(intermediate)
     
-    if (tempFilter.length > 0) {
+    if (intermediate.length > 0) {
       let newFilter = filterByTemperament(intermediate)
       setIsFiltered({
         filter: true,
@@ -181,7 +190,7 @@ function Filter({ setIsFiltered, isFiltered }) {
                   </option>
 
                 ))}
-                
+
           </select>
         </>
       ) : null}

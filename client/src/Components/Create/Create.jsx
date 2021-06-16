@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getTemperament, addBreed, getBreeds } from "../../Actions/index";
+import {  addBreed } from "../../Actions/index";
 
 
 function Create() {
@@ -18,10 +18,6 @@ function Create() {
     description: "",
   });
 
-  useEffect(() => {
-    dispatch(getTemperament());
-    dispatch(getBreeds());
-  }, [dispatch]);
 
   const handleInput = (event) => {
     if (event.target.name !== "temperament") {
@@ -97,7 +93,7 @@ function Create() {
         {Array.isArray(stateTemp) ? (
           <select name="temperament" onChange={handleInput} value={temp}>
             {stateTemp.map((e) => (
-              <option name="temperament" key={e.id} onChange={handleInput}>
+              <option name="temperament" key={e.name + 'create'} onChange={handleInput}>
                 {e.name}
               </option>
             ))}
