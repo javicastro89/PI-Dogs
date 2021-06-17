@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import Pagination from '../Pagination/Pagination';
+import { Link } from 'react-router-dom';
 
 function DisplayFilter({filter}) {
     const [pageNumber, setPageNumber] = useState(1)
@@ -19,7 +20,9 @@ function DisplayFilter({filter}) {
             {
             filter.slice(pagesVisited, breedsPerPage + pagesVisited).map((breed) => (
                 <div key={breed.id}>
+                  <Link to={`/detail/${breed.id}`}>
                   <h4> {breed.name} </h4>
+                  </Link>
                   <h6>{breed.temperament}</h6>
                   <img src={breed.image} alt="Foto raza" className="dogPic" />
                 </div>

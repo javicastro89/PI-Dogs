@@ -1,69 +1,30 @@
 import React, { useState } from "react";
-// import { useSelector } from "react-redux";
+import {orderByAlpha, orderByWeight} from './OrderFunctions'
 
-function Order({ isFiltered, breed, setOrder, order }) {
-//   const breed = useSelector((state) => state.breeds);
+function Order({ isFiltered, breed, setOrder }) {
   const [openOrder, setOpenOrder] = useState(false);
   const [state, setState] = useState({
       Alpha: '',
-      Ascendent: ''
+      Weight: ''
   })
 
-  function orderByAlpha(Alpha) {
-    
-    if (isFiltered.filter) {
-      if (Alpha) {
-        for (let i = 0; i < isFiltered.arrayFilter.length - 1; i++) {
-          for (let j = i + 1; j < isFiltered.arrayFilter.length; j++) {
-            if (isFiltered.arrayFilter[i].name.toLowerCase() > isFiltered.arrayFilter[j].name.toLowerCase()) {
-              [isFiltered.arrayFilter[i], isFiltered.arrayFilter[j]] = [isFiltered.arrayFilter[j], isFiltered.arrayFilter[i]];
-            }
-          }
-        }
-        
-      } else {
-        for (let i = 0; i < isFiltered.arrayFilter.length - 1; i++) {
-          for (let j = i + 1; j < isFiltered.arrayFilter.length; j++) {
-            if (isFiltered.arrayFilter[i].name.toLowerCase() < isFiltered.arrayFilter[j].name.toLowerCase()) {
-              [isFiltered.arrayFilter[i], isFiltered.arrayFilter[j]] = [isFiltered.arrayFilter[j], isFiltered.arrayFilter[i]];
-            }
-          }
-        }
-      }
-      
-    } else if (Alpha) {
-      for (let i = 0; i < breed.length - 1; i++) {
-        for (let j = i + 1; j < breed.length; j++) {
-          if (breed[i].name.toLowerCase() > breed[j].name.toLowerCase()) {
-            [breed[i], breed[j]] = [breed[j], breed[i]];
-          }
-        }
-      }
-      
-    } else {
-      for (let i = 0; i < breed.length - 1; i++) {
-        for (let j = i + 1; j < breed.length; j++) {
-          if (breed[i].name.toLowerCase() < breed[j].name.toLowerCase()) {
-            [breed[i], breed[j]] = [breed[j], breed[i]];
-          }
-        }
-      }
-    }
-    setOrder(true)
-  }
 
   function handleOrder(event) {
     event.preventDefault();
 
     if (event.target.value === "false") {
       setOpenOrder(true);
+
     } else {
+
       setOpenOrder(false);
-      console.log('Me estoy yendo')
       setOrder(false)
-      orderByAlpha(true)
+
+      isFiltered.filter ? orderByAlpha(true, isFiltered.arrayFilter) : orderByAlpha(true, breed);
+
+      setOrder(true)
       setState({
-        ...state,
+        Weight: '',
         Alpha: ''
       })
     }
@@ -76,9 +37,20 @@ function Order({ isFiltered, breed, setOrder, order }) {
           [event.target.name]: [event.target.value]
       })
     if(event.target.value === 'A-Z'){
-        orderByAlpha(true)
+      isFiltered.filter ? orderByAlpha(true, isFiltered.arrayFilter) : orderByAlpha(true, breed);
+      setOrder(true)
+      
     } else if (event.target.value === 'Z-A') {
-      orderByAlpha(false)
+      isFiltered.filter ? orderByAlpha(false, isFiltered.arrayFilter) : orderByAlpha(false, breed);
+      setOrder(true)
+
+    } else if (event.target.value === 'Ascendent') {
+      isFiltered.filter ? orderByWeight(true, isFiltered.arrayFilter) : orderByWeight(true, breed);
+      setOrder(true)
+
+    } else if (event.target.value === 'Descendent') {
+      isFiltered.filter ? orderByWeight(false, isFiltered.arrayFilter) : orderByWeight(false, breed);
+      setOrder(true)
     }
   }
 
@@ -91,11 +63,38 @@ function Order({ isFiltered, breed, setOrder, order }) {
       </button>
       {openOrder ? 
       <>
-      <label>names</label>
+      <label> Names </label>
       <select name='Alpha' onChange={handleChange} value={state.Alpha}>
           <option></option>
-          <option name='A-Z' onChange={handleChange} value='A-Z'>A-Z</option>
-          <option name='Z-A' onChange={handleChange} value='Z-A'>Z-A</option>
+          <option 
+          name='A-Z' 
+          onChange={handleChange} 
+          value='A-Z'>
+            A-Z
+            </option>
+          <option
+          name='Z-A' 
+          onChange={handleChange} 
+          value='Z-A'>
+            Z-A
+          </option>
+
+      </select> 
+      <label> Weight </label>
+      <select name='Weight' onChange={handleChange} value={state.Weight}>
+          <option></option>
+          <option 
+          name='Ascendent' 
+          onChange={handleChange} 
+          value='Ascendent'>
+            Ascendent
+            </option>
+          <option 
+          name='Descendent' 
+          onChange={handleChange} 
+          value='Descendent'>
+            Descendent
+            </option>
 
       </select> 
       </>

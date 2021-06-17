@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {  addBreed } from "../../Actions/index";
-
+import {  addBreed, getTemperament, getBreeds } from "../../Actions/index";
+import { validate } from "./Validate";
 
 function Create() {
   const dispatch = useDispatch();
-  let stateTemp = useSelector((state) => state.temperament);
-  let stateBreeds = useSelector((state) => state.breeds);
-  let [temp, setTemp] = useState("Active");
+  const stateTemp = useSelector(state => state.temperament);
+  const breeds = useSelector(state => state.breeds)
+  let [temp, setTemp] = useState("");
+  const [error, setError] = useState({error: 'error'})
+  const [submit, setSubmit] = useState(false)
 
   const [input, setInput] = useState({
     name: "",
@@ -20,13 +22,21 @@ function Create() {
 
 
   const handleInput = (event) => {
+    setError(
+      validate({
+        ...input,
+        [event.target.name]: event.target.value
+      }, breeds)
+    )
     if (event.target.name !== "temperament") {
+      
       setInput({
         ...input,
         [event.target.name]: event.target.value,
       });
     } else if (event.target.name === "temperament") {
       setTemp(event.target.value);
+      
     }
   };
 
@@ -34,11 +44,12 @@ function Create() {
     event.preventDefault();
     if (temp !== "") {
       if (!input.temperament.find((e) => e === temp)) {
-        setInput({
-          ...input,
-          temperament: [...input.temperament, temp],
-        });
-        setTemp("Active");
+        input.temperament.push(temp)
+        // setInput({
+        //   ...input,
+        //   temperament: [...input.temperament, temp],
+        // });
+        setTemp("");
       }
     }
   };
@@ -46,6 +57,9 @@ function Create() {
   const eraseTemp = (event) => {
     event.preventDefault();
     let localTemp = input.temperament.filter((e) => e !== event.target.value);
+    // input.temperament = localTemp
+    // console.log(localTemp)
+    // console.log(input.temperament)
     setInput({
       ...input,
       temperament: localTemp,
@@ -70,11 +84,47 @@ function Create() {
         life_span: "",
         description: "",
       });
+    } else {
+      return <h1>Wrong !!</h1>
     }
-    let newBreed = stateBreeds[0];
-    return <h1>{newBreed.name}</h1>;
+    
   };
 
+  useEffect(() => {
+    dispatch(getBreeds())
+    dispatch(getTemperament())
+    
+  }, [dispatch])
+  
+  useEffect(() => {
+    if(Object.values(error).length === 0) {
+      setSubmit(true)
+    } else {
+      setSubmit(false)
+    }
+  }, [error])
+
+  useEffect(() => {
+    if(input.name !== '' ) {
+      if(input.temperament.length === 0) {
+        setError(
+          validate({
+            ...input,
+            temperament: []
+          }, breeds)
+        )
+      } else {
+        setError(
+          validate({
+            ...input,
+            temperament: input.temperament
+          }, breeds)
+        )
+      }
+
+    }
+  }, [input, breeds])
+  // console.log(Object.values(input))
   return (
     <form onSubmit={handleSubmit}>
       <div>
@@ -86,33 +136,33 @@ function Create() {
           value={input.name}
           onChange={handleInput}
         />
+        {error.name && <p>{error.name}</p>}
       </div>
 
       <div>
         <label>Temperamento: </label>
-        {Array.isArray(stateTemp) ? (
+      
           <select name="temperament" onChange={handleInput} value={temp}>
+            <option></option>
             {stateTemp.map((e) => (
-              <option name="temperament" key={e.name + 'create'} onChange={handleInput}>
+              <option name="temperament" key={e.name} onChange={handleInput}>
                 {e.name}
               </option>
             ))}
           </select>
-        ) : (
-          <h1>Cargando...</h1>
-        )}
         <button onClick={handleTemp}>+</button>
+          {error.temperament && <p>{error.temperament}</p>}     
         <div>
           {input.temperament.length > 0
             ? input.temperament.map((e) => (
-                <label key={e}>
+                <p key={e}>
                   <label> {e} </label>
                   <button onClick={eraseTemp} value={e}>
                     x
                   </button>
-                </label>
+                </p>
               ))
-            : null}
+            : <p></p>}
         </div>
       </div>
 
@@ -125,6 +175,7 @@ function Create() {
           value={input.weight}
           onChange={handleInput}
         />
+        {error.weight && <p>{error.weight}</p>}
       </div>
 
       <div>
@@ -136,6 +187,7 @@ function Create() {
           value={input.height}
           onChange={handleInput}
         />
+        {error.height && <p>{error.height}</p>}
       </div>
 
       <div>
@@ -147,6 +199,7 @@ function Create() {
           value={input.life_span}
           onChange={handleInput}
         />
+        {error.life_span && <p>{error.life_span}</p>}
       </div>
 
       <div>
@@ -157,7 +210,7 @@ function Create() {
           onChange={handleInput}
         />
       </div>
-      <input type="submit" value="Crear" />
+      <input type="submit" value="Crear" disabled={!submit} />
     </form>
   );
 }

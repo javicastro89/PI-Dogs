@@ -17,7 +17,7 @@ function App() {
       <Route path='/' render={() => <NavBar navBarFlag={navBar}/>} />
       <Route path='/home' component={Home} />
       <Route path='/create' exact component={Create} />
-      <Route path='/detail' exact component={Detail} />
+      <Route path='/detail/:id' exact component={Detail} />
     </div>
   );
 }

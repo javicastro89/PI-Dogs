@@ -18,7 +18,7 @@ function Home() {
     filter: false,
     arrayFilter: []
   })
-  const [breed, setBreed] = useState(breeds)
+  const [breed, setBreed] = useState([])
   const [order, setOrder] = useState(false);
   
 
@@ -40,8 +40,10 @@ function Home() {
     setBreed(breeds)
     return () => setOrder(false)
   }, [breeds, order])
-  
 
+  
+  
+  
   if (breed.length > 0) {
     if(isFiltered.filter) {
       
@@ -53,8 +55,19 @@ function Home() {
           <DisplayFilter filter={isFiltered.arrayFilter} />
         </div>
       )
+    } if (searchBreed === null) {
+      
+      return (
+        <div>
+           <Search />
+          <Filter setIsFiltered={setIsFiltered} isFiltered={isFiltered} />
+          <Order isFiltered={isFiltered} breed={breed} setOrder={setOrder}/>
+          <h1>Breed does not exist...</h1>
+        </div>
+        )
     }
-    if (searchBreed.length > 0) {
+      if (searchBreed !== null && searchBreed.length > 0) {
+        
       return (
         <div>
           <Search />
@@ -63,12 +76,14 @@ function Home() {
           <DisplaySearch />
         </div>
       );
-    } else {
+    
+    }
+    else {
       return (
         <div>
           <Search />
           <Filter setIsFiltered={setIsFiltered} isFiltered={isFiltered} />
-          <Order isFiltered={isFiltered} breed={breed} setOrder={setOrder} order={order} />
+          <Order isFiltered={isFiltered} breed={breed} setOrder={setOrder} />
           <DisplayBreeds
             breeds={breed}
             pagesVisited={pagesVisited}

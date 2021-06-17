@@ -13,7 +13,7 @@ export function getBreeds() {
     }
 }
 
-export function getBreedsDetail(id) {
+export function getBreedDetail(id) {
     return function (dispatch) {
         axios.get(`http://localhost:3001/dogs/${id}`)
             .then(result => dispatch({
@@ -49,6 +49,19 @@ export function searchBreeds(name){
         .then(result => dispatch({
             type: SEARCH_BREEDS,
             payload: result.data
-        }))
+        })).catch(error => {
+            if(error.response?.status !== 400) alert("Algo salió mal 😅")
+            dispatch({
+                type: SEARCH_BREEDS,
+                payload: null
+            })
+        })
+    }
+}
+
+export function clearDetail(){
+    return {
+        type: GET_BREED_DETAIL,
+        payload: undefined
     }
 }

@@ -100,6 +100,15 @@ function Filter({ setIsFiltered, isFiltered }) {
 
     } else {
       setFilter(false);
+      setState({
+        temp: "",
+        breed: "",
+      })
+      setIsFiltered({
+        filter: false,
+        arrayFilter: []
+      });
+      setTempFilter([])
     }
   }
 

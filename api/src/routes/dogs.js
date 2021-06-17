@@ -19,142 +19,104 @@ router.get('/dogs', (req, res) => {
 
                 let remoteBreedsForImage = await axios.get('https://api.thedogapi.com/v1/breeds')
 
-                for(let i of remoteBreedsWhitoutImage) {
-                    for(let j = 0; j < remoteBreedsForImage.data.length; j++) {
-                        
-                        if(remoteBreedsForImage.data[j].name === i.name) {
+                for (let i of remoteBreedsWhitoutImage) {
+                    for (let j = 0; j < remoteBreedsForImage.data.length; j++) {
+
+                        if (remoteBreedsForImage.data[j].name === i.name) {
                             i.image = remoteBreedsForImage.data[j].image
                             remoteBreeds.push(i)
 
                         }
 
                     }
-                    
+
                 }
-               
-                if (remoteBreeds.length > 0) {
-                    
-                    Breed.findAll({ where: { name: { [Op.iLike]: `%${name}%` } } })
-                    .then(async (result) => {
-                        
-                            if (result.length > 0) {
-                                let internalTemp = []
-                                
-                                for (let i of result) {
-                                    let fullTemp = await Breed_Temperament.findAll({ where: { BreedId: i.id } })
 
-                                    let onlyTempId = fullTemp.map(e => {
-                                        return e.dataValues.TemperamentId
-                                    })
+                let resultBreed = await Breed.findAll({
 
-                                    let dogTemp = []
-                                    for (let j of onlyTempId) {
-                                        dogTemp.push(await Temperament.findOne({ where: { id: j } }))
-                                    }
+                    include: Temperament,
+                    through: { attributes: [name] },
 
-                                    let onlyTempName = dogTemp.map(e => {
-                                        return e.dataValues.name
-                                    })
-                                    internalTemp.push({ name: i.name, temp: onlyTempName })
-                                }
+                    where: {
+                        name: {
+                            [Op.iLike]: `%${name}%`
+                        }
+                    }
+                })
+                let dogInt
+                if (resultBreed.length > 0) {
 
-                                let dogInt = result.map(dog => {
-                                    for (let i of internalTemp) {
-                                        if (i.name === dog.name) {
-                                            return {
-                                                name: dog.name,
-                                                temperament: i.temp.join(', '),
-                                                height: dog.height,
-                                                weight: dog.weight,
-                                                life_span: dog.life_span,
-                                                id: dog.id,
-                                                image: dog.image
-                                            }
-
-                                        }
-                                    }
-                                })
-                                
-                                let dogsExt = remoteBreeds.map(dog => {
-                                    return {
-                                        name: dog.name,
-                                        temperament: dog.temperament,
-                                        image: dog.image.url,
-                                        height: dog.height.metric,
-                                        weight: dog.weight.metric,
-                                        life_span: dog.life_span,
-                                        id: dog.id
-                                    }
-                                })
-
-                                return res.json([...dogInt, ...dogsExt])
-
-                            } else {
-                                
-                                let dogs = remoteBreeds.map(dog => {
-                                    
-                                    return {
-                                        name: dog.name,
-                                        temperament: dog.temperament,
-                                        image: dog.image.url,
-                                        height: dog.height.metric,
-                                        weight: dog.weight.metric,
-                                        life_span: dog.life_span,
-                                        id: dog.id
-                                    }
-                                })
-                                
-                                return res.json(dogs)
-                            }
+                    let temp
+                    dogInt = resultBreed.map(dog => {
+                        temp = dog.Temperaments.map(t => {
+                            return t.dataValues.name
                         })
-                        .catch((err) => res.status(500).json({ error: 'Error en la búsqueda' }))
+                        return {
+                            name: dog.name,
+                            temperament: temp.join(', '),
+                            height: dog.height,
+                            weight: dog.weight,
+                            life_span: dog.life_span,
+                            id: dog.id,
+                            image: dog.image
+                        }
+                    })
+                }
+
+
+                if (remoteBreeds.length > 0) {
+
+                    let dogsExt = remoteBreeds.map(dog => {
+                        let arr = dog.weight.metric.split(' - ')
+
+                        let sum
+                        if (!arr.includes('NaN')) {
+                            sum = arr.reduce((acum, ele) => {
+                                return parseInt(acum) + parseInt(ele)
+                            })
+
+                        } else if (arr.length === 1 && arr.includes('NaN')) {
+                            arr = dog.weight.imperial.split(' – ')
+                            sum = arr.reduce((acum, ele) => {
+                                return parseInt(acum) + parseInt(ele)
+                            })
+                            sum = sum / 2.205
+
+                        } else {
+                            arr = arr.filter(e => e !== 'NaN')
+                            sum = arr.reduce((acum, ele) => {
+                                return parseInt(acum) + parseInt(ele)
+                            })
+                        }
+
+                        let prom = sum / arr.length
+
+                        return {
+                            name: dog.name,
+                            temperament: dog.temperament,
+                            image: dog.image.url,
+                            height: dog.height.metric,
+                            weight: prom,
+                            life_span: dog.life_span,
+                            id: dog.id
+                        }
+                    })
+                    if (dogInt) {
+
+                        return res.json([...dogInt, ...dogsExt])
+                    } else {
+                        return res.json(dogsExt)
+                    }
 
                 } else {
-                    Breed.findAll({ where: { name: { [Op.iLike]: `%${name}%` } } })
-                        .then(async (result) => {
-                            if (result.length > 0) {
-                                let internalTemp = []
 
-                                for (let i of result) {
-                                    let fullTemp = await Breed_Temperament.findAll({ where: { BreedId: i.id } })
+                    if (resultBreed.length > 0) {
 
-                                    let onlyTempId = fullTemp.map(e => {
-                                        return e.dataValues.TemperamentId
-                                    })
+                        return res.json(dogInt)
+                    } else {
+                        return res.status(400).json({ error: 'No existen razas de perros con ese nombre.' })
+                    }
 
-                                    let dogTemp = []
-                                    for (let j of onlyTempId) {
-                                        dogTemp.push(await Temperament.findOne({ where: { id: j } }))
-                                    }
-
-                                    let onlyTempName = dogTemp.map(e => {
-                                        return e.dataValues.name
-                                    })
-                                    internalTemp.push({ name: i.name, temp: onlyTempName })
-                                }
-
-                                let dogInt = result.map(dog => {
-                                    for (let i of internalTemp) {
-                                        if (i.name === dog.name) {
-                                            return {
-                                                name: dog.name,
-                                                temperament: i.temp.join(', '),
-                                                height: dog.height,
-                                                weight: dog.weight,
-                                                life_span: dog.life_span,
-                                                id: dog.id,
-                                                image: dog.image
-                                            }
-
-                                        }
-                                    }
-                                })
-                                return res.json(dogInt)
-                            } else {
-                                return res.status(400).json({ error: 'No existen razas de perros con ese nombre.' })
-                            }
-                        })
-                        .catch((err) => res.status(500).json({ error: 'Ups!! ' }))
                 }
 
             }, () => {
@@ -164,96 +126,90 @@ router.get('/dogs', (req, res) => {
         // Si no hay busqueda por query
     } else {
         axios.get('https://api.thedogapi.com/v1/breeds')
-            .then((result) => {
+            .then(async (result) => {
                 if (result) {
                     remoteBreeds = result.data
                 }
 
-                return Breed.findAll()
-            })
-            .then(async (result) => {
+                let resultBreed = await Breed.findAll({
+                    include: Temperament,
+                    through: { attributes: [name] }
+                })
 
-                if (result.length > 0) {
-                    
-                    let internalTemp = []
+                let dogInt
+                if (resultBreed.length > 0) {
 
-                    for (let i of result) {
-                        let fullTemp = await Breed_Temperament.findAll({ where: { BreedId: i.id } })
-
-                        let onlyTempId = fullTemp.map(e => {
-                            return e.dataValues.TemperamentId
+                    let temp
+                    dogInt = resultBreed.map(dog => {
+                        temp = dog.dataValues.Temperaments.map(t => {
+                            return t.dataValues.name
                         })
 
-                        let dogTemp = []
-                        for (let j of onlyTempId) {
-                            dogTemp.push(await Temperament.findOne({ where: { id: j } }))
-                        }
-
-                        let onlyTempName = dogTemp.map(e => {
-                            return e.dataValues.name
-                        })
-                        internalTemp.push({ name: i.name, temp: onlyTempName })
-                        
-                    }
-
-                    let dogInt = result.map(dog => {
-                        for (let i of internalTemp) {
-                            if (i.name === dog.name) {
-                                return {
-                                    name: dog.name,
-                                    temperament: i.temp.join(', '),
-                                    height: dog.height,
-                                    weight: dog.weight,
-                                    life_span: dog.life_span,
-                                    id: dog.id,
-                                    image: dog.image
-                                }
-
-                            }
+                        return {
+                            name: dog.dataValues.name,
+                            temperament: temp.join(', '),
+                            height: dog.dataValues.height,
+                            weight: dog.dataValues.weight,
+                            life_span: dog.dataValues.life_span,
+                            id: dog.dataValues.id,
+                            image: dog.dataValues.image
                         }
                     })
-                    
-                    if (remoteBreeds) {
-                        let dogsExt = remoteBreeds.map(dog => {
-                            return {
-                                name: dog.name,
-                                temperament: dog.temperament,
-                                image: dog.image.url,
-                                height: dog.height.metric,
-                                weight: dog.weight.metric,
-                                life_span: dog.life_span,
-                                id: dog.id
-                            }
-                        })
+                }
 
-                        return res.json([...dogInt, ...dogsExt])
-                    } else {
-                        return res.json(dogInt)
-                    }
-                } else if (remoteBreeds.length > 0) {
-
+                if (remoteBreeds.length > 0) {
                     let dogsExt = remoteBreeds.map(dog => {
+                        let arr = dog.weight.metric.split(' - ')
+
+                        let sum
+                        if (!arr.includes('NaN')) {
+                            sum = arr.reduce((acum, ele) => {
+                                return parseInt(acum) + parseInt(ele)
+                            })
+
+                        } else if (arr.length === 1 && arr.includes('NaN')) {
+                            arr = dog.weight.imperial.split(' – ')
+                            sum = arr.reduce((acum, ele) => {
+                                return parseInt(acum) + parseInt(ele)
+                            })
+                            sum = sum / 2.205
+
+                        } else {
+                            arr = arr.filter(e => e !== 'NaN')
+                            sum = arr.reduce((acum, ele) => {
+                                return parseInt(acum) + parseInt(ele)
+                            })
+                        }
+
+                        let prom = sum / arr.length
+
                         return {
                             name: dog.name,
                             temperament: dog.temperament,
                             image: dog.image.url,
                             height: dog.height.metric,
-                            weight: dog.weight.metric,
+                            weight: prom,
                             life_span: dog.life_span,
                             id: dog.id
                         }
                     })
+                    if (dogInt) {
+                        return res.json([...dogInt, ...dogsExt])
 
-                    return res.json(dogsExt)
+                    } else {
+                        return res.json(dogsExt)
+                    }
 
                 } else {
-                    return res.json({ error: 'No se encontraron razas en API ni en BD' })
+                    if (resultBreed.length > 0) {
+                        return res.json(dogInt)
+
+                    } else {
+                        return res.json({ error: 'No se encontraron razas en API ni en BD' })
+                    }
                 }
-
             })
-            .catch((err) => res.status(500).json({ error: 'Ups!! ' }))
     }
-
 })
 
 
@@ -269,7 +225,45 @@ router.get('/dogs/:idRaza', (req, res) => {
 
             let remoteBreeds = result.data
             let breed = remoteBreeds.find(dog => dog.id === parseInt(idRaza))
-            if (breed) return res.json(breed)
+            if (breed) {
+
+                let arr = breed.weight.metric.split(' - ')
+
+                let sum
+                if (!arr.includes('NaN')) {
+
+                    sum = arr.reduce((acum, ele) => {
+                        return parseInt(acum) + parseInt(ele)
+                    })
+
+                } else if (arr.length === 1 && arr.includes('NaN')) {
+                    arr = dog.weight.imperial.split(' – ')
+                    sum = arr.reduce((acum, ele) => {
+                        return parseInt(acum) + parseInt(ele)
+                    })
+                    sum = sum / 2.205
+
+                } else {
+                    arr = arr.filter(e => e !== 'NaN')
+                    sum = arr.reduce((acum, ele) => {
+                        return parseInt(acum) + parseInt(ele)
+                    })
+                }
+
+                let prom = sum / arr.length
+
+                let dogExt = {
+                    name: breed.name,
+                    temperament: breed.temperament,
+                    image: breed.image.url,
+                    height: breed.height.metric,
+                    weight: prom,
+                    life_span: breed.life_span,
+                    id: breed.id
+                }
+
+                return res.json(dogExt)
+            }
 
             Breed.findByPk(parseInt(idRaza))
                 .then(result => {
@@ -339,7 +333,7 @@ router.post('/dog', (req, res) => {
                 }
 
                 let pic = await axios.get('https://dog.ceo/api/breeds/image/random')
-                console.log(pic.data.message)
+
 
                 let newBreed = await Breed.findOrCreate({
                     where: { name: name },

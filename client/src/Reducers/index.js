@@ -13,13 +13,13 @@ export default function reducer(state = initialState, action) {
         case GET_BREEDS:
             return {
                 ...state,
-                breeds: [...state.breeds, ...action.payload]
+                breeds: action.payload
             };
 
         case GET_TEMPERAMENT:
             return {
                 ...state,
-                temperament: [...state.temperament, ...action.payload]
+                temperament: action.payload
             }
 
         case ADD_BREED:
@@ -35,7 +35,10 @@ export default function reducer(state = initialState, action) {
             }
 
         case GET_BREED_DETAIL:
-            return state
+            return {
+                ...state,
+                breedDetail: action.payload
+            }
 
         default: return state
     }
