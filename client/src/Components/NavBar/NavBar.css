@@ -10,7 +10,7 @@
 .navBar {
     height: 55px;
     width: 100%;
-    background-color: var(--primary-color);
+    background-color: var(--primary-color-dark);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -34,12 +34,12 @@
 
 .list a {
     text-decoration: none;
-    color: var(--text-color);
+    color: var(--title-color);
     padding: 16px 10px;
        
 }
 
 .list a:hover {
-    color: var(--primary-color-dark);
+    color: var(--primary-color);
 }
 

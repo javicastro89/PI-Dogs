@@ -350,13 +350,13 @@ router.post('/dog', (req, res) => {
                 if (newBreed[1]) {
 
                     while (temperament.length) {
-                        let temp = temperament.shift()
-                        let arr = await Temperament.findAll({
+                        let element = temperament.shift()
+                        let temp = await Temperament.findAll({
                             where: {
-                                name: { [Op.iLike]: `${temp}%` }
+                                name: { [Op.iLike]: `${element}%` }
                             }
                         })
-                        await newBreed[0].addTemperaments(arr)
+                        await newBreed[0].addTemperaments(temp)
                     }
                 }
                 return res.json(newBreed)

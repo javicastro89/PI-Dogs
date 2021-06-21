@@ -7,9 +7,9 @@ import './NavBar.css'
 function NavBar({ navBarFlag }) {
   return navBarFlag ? (
     <>
-    <div className='top'>
+    {/* <div className='top'>
     THE DOG APP
-    </div>
+    </div> */}
     <header className='navBar'>
       <div>
       <NavLink exact to="/home" >

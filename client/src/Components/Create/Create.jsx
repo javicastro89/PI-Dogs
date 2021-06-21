@@ -2,14 +2,18 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {  addBreed, getTemperament, getBreeds } from "../../Actions/index";
 import { validate } from "./Validate";
+import { useHistory } from "react-router";
+import './Create.css'
 
-function Create() {
+function Create({setCreate}) {
   const dispatch = useDispatch();
   const stateTemp = useSelector(state => state.temperament);
   const breeds = useSelector(state => state.breeds)
   let [temp, setTemp] = useState("");
   const [error, setError] = useState({error: 'error'})
   const [submit, setSubmit] = useState(false)
+  let history = useHistory()
+  
 
   const [input, setInput] = useState({
     name: "",
@@ -40,6 +44,7 @@ function Create() {
     }
   };
 
+
   const handleTemp = (event) => {
     event.preventDefault();
     if (temp !== "") {
@@ -54,27 +59,20 @@ function Create() {
     }
   };
 
+
   const eraseTemp = (event) => {
     event.preventDefault();
     let localTemp = input.temperament.filter((e) => e !== event.target.value);
-    // input.temperament = localTemp
-    // console.log(localTemp)
-    // console.log(input.temperament)
     setInput({
       ...input,
       temperament: localTemp,
     });
   };
 
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (
-      input.name !== "" &&
-      input.temperament.length > 0 &&
-      input.weight > 5 &&
-      input.height > 10 &&
-      input.life_span > 1
-    ) {
+      setCreate(true)
       dispatch(addBreed(input));
       setInput({
         name: "",
@@ -84,17 +82,21 @@ function Create() {
         life_span: "",
         description: "",
       });
-    } else {
-      return <h1>Wrong !!</h1>
-    }
-    
+      setError(
+        validate({
+          ...input,
+          temperament: []
+        }, breeds))
+        history.push('/home')
   };
+
 
   useEffect(() => {
     dispatch(getBreeds())
     dispatch(getTemperament())
     
   }, [dispatch])
+
   
   useEffect(() => {
     if(Object.values(error).length === 0) {
@@ -103,6 +105,7 @@ function Create() {
       setSubmit(false)
     }
   }, [error])
+
 
   useEffect(() => {
     if(input.name !== '' ) {
@@ -124,94 +127,122 @@ function Create() {
 
     }
   }, [input, breeds])
-  // console.log(Object.values(input))
+
+
   return (
-    <form onSubmit={handleSubmit}>
+    <div className='container'>
+    <form onSubmit={handleSubmit} className='form'>
       <div>
-        <label>Nombre de la raza: </label>
+        <p>Breed name</p>
         <input
+          className={error.name ? 'danger' : 'input'}
           type="text"
           name="name"
-          placeholder="Raza..."
+          placeholder="Breed.."
           value={input.name}
           onChange={handleInput}
         />
-        {error.name && <p>{error.name}</p>}
+        {error.name && <p className='danger'>{error.name}</p>}
       </div>
 
-      <div>
-        <label>Temperamento: </label>
-      
-          <select name="temperament" onChange={handleInput} value={temp}>
+      <div className='fullTempContainer'>
+        <div>Temperament</div>
+        <div>
+          <select 
+          name="temperament"
+          onChange={handleInput} 
+          value={temp} 
+          className={error.temperament ? 'danger' : 'select'}>
             <option></option>
             {stateTemp.map((e) => (
-              <option name="temperament" key={e.name} onChange={handleInput}>
+              <option 
+              name="temperament" 
+              key={e.name} 
+              onChange={handleInput}>
                 {e.name}
               </option>
             ))}
           </select>
-        <button onClick={handleTemp}>+</button>
-          {error.temperament && <p>{error.temperament}</p>}     
-        <div>
+        <button onClick={handleTemp} className='addBtn' data-tooltip='Add'>+</button>
+          </div>
+          {error.temperament && <p className='danger'>{error.temperament}</p>}     
+        <div className='selectedTemp'>
           {input.temperament.length > 0
-            ? input.temperament.map((e) => (
-                <p key={e}>
-                  <label> {e} </label>
-                  <button onClick={eraseTemp} value={e}>
+            ? input.temperament.map((e, index) => (
+                <div key={e} className='tempContainer'>
+                  {index % 2 !== 0 ? 
+                  <>
+                  <h6 className='tempSelect'> {e} </h6>
+                  <button onClick={eraseTemp} value={e} data-tooltip='Delete'>
                     x
-                  </button>
-                </p>
+                  </button> 
+                  </>
+                  : 
+                  <>
+                  <button onClick={eraseTemp} value={e} data-tooltip='Delete'>
+                    x
+                  </button> 
+                  <h6 className='tempSelect'> {e} </h6>
+                  </>
+                  }
+                </div>
               ))
             : <p></p>}
         </div>
       </div>
 
       <div>
-        <label>Peso promedio: </label>
+        <p>Average weight</p>
         <input
+          className={error.weight ? 'danger' : 'input'}
           type="number"
           name="weight"
-          placeholder="Peso en kg..."
+          placeholder="Weight in kg..."
           value={input.weight}
           onChange={handleInput}
         />
-        {error.weight && <p>{error.weight}</p>}
+        {error.weight && <p className='danger'>{error.weight}</p>}
       </div>
 
       <div>
-        <label>Altura promedio: </label>
+        <p>Average height</p>
         <input
+          className={error.height ? 'danger' : 'input'}
           type="number"
           name="height"
-          placeholder="Altura en cm..."
+          placeholder="Height in cm..."
           value={input.height}
           onChange={handleInput}
         />
-        {error.height && <p>{error.height}</p>}
+        {error.height && <p className='danger'>{error.height}</p>}
       </div>
 
       <div>
-        <label>Años de vida promedio: </label>
+        <p>Life span</p>
         <input
+          className={error.life_span ? 'danger' : 'input'}
           type="number"
           name="life_span"
-          placeholder="Años..."
+          placeholder="Life span..."
           value={input.life_span}
           onChange={handleInput}
         />
-        {error.life_span && <p>{error.life_span}</p>}
+        {error.life_span && <p className='danger'>{error.life_span}</p>}
       </div>
 
       <div>
-        <label>Descripción: </label>
+        <p>Description</p>
         <textarea
+          className='inputTarea'
           value={input.description}
           name="description"
+          placeholder='Description...'
           onChange={handleInput}
         />
       </div>
       <input type="submit" value="Crear" disabled={!submit} />
     </form>
+    </div>
   );
 }
 

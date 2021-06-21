@@ -19,5 +19,15 @@ code {
   --secodary-color: #1b5e20;
   --secodary-color-light: #4c8c4a;
   --secodary-color-dark: #003300;
-  --text-color: #ffffff;
+  /* --text-color: #ffffff; */
+  --background-card: #eeeeee;
+  /*Nuevos colores*/
+  --body: #192229;
+  --container: #212E36;
+  --border: #2A3B47;
+  --text-color: #C8CDD0;
+  --title-color: #EFF3F5;
+  --light-text-color: #A0A7AC;
+  --btn-color: #1e5179;
+  --btn-color-active: #52A5E0;
 }

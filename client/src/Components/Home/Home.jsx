@@ -2,14 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getBreeds } from "../../Actions";
 import Search from "../Search/Search";
-import DisplayBreeds from "../Display/DisplayBreeds";
-import DisplaySearch from "../Display/DisplaySearch";
 import Filter from "../Filters/Filter";
-import DisplayFilter from "../Display/DisplayFilter";
 import Order from "../Order/Order";
+import Dislpay from "../Display/Dislpay";
+
 import "./Home.css";
 
-function Home() {
+function Home({create, setCreate}) {
   const dispatch = useDispatch();
   const breeds = useSelector(state => state.breeds)
   const searchBreed = useSelector((state) => state.searchBreeds);
@@ -18,14 +17,14 @@ function Home() {
     filter: false,
     arrayFilter: []
   })
-  const [breed, setBreed] = useState([])
   const [order, setOrder] = useState(false);
+  
   
 
   // Change page
   const paginate = (event) => {
-    event.preventDefault();
-    setPageNumber(event.target.value);
+    // event.preventDefault();
+    setPageNumber(event);
   };
 
   // Get current Page
@@ -36,67 +35,87 @@ function Home() {
     dispatch(getBreeds());
   }, [dispatch]);
 
+ useEffect(() => {
+   if(create) {
+     dispatch(getBreeds())
+   }
+   return () => setCreate(false)
+ }, [create, dispatch, setCreate])
+
+
   useEffect(() => {
-    setBreed(breeds)
     return () => setOrder(false)
-  }, [breeds, order])
+  }, [order])
 
   
+  let arrayToShow
   
-  
-  if (breed.length > 0) {
+  if (breeds.length > 0) {
+      arrayToShow = breeds
     if(isFiltered.filter) {
-      
+      console.log('Is filtered chango')
+        arrayToShow = isFiltered.arrayFilter
+    }
+    if (searchBreed !== null && searchBreed.length > 0) {
+        arrayToShow = searchBreed
+    }
+    
       return (
-        <div>
+        <div className='primaryDiv'>
           <Search />
           <Filter setIsFiltered={setIsFiltered} isFiltered={isFiltered}/>
-          <Order isFiltered={isFiltered} breed={breed} setOrder={setOrder}/>
-          <DisplayFilter filter={isFiltered.arrayFilter} />
+          <Order isFiltered={isFiltered} breed={arrayToShow} setOrder={setOrder}/>
+
+          {searchBreed === null ? <h1>Breed does not exist</h1> : <Dislpay 
+          pagesVisited={pagesVisited}
+          breedsPerPage={breedsPerPage}
+          paginate={paginate}
+          pageNumber={pageNumber}
+          breeds={arrayToShow} />}
         </div>
       )
-    } if (searchBreed === null) {
+    //  if (searchBreed === null) {
       
-      return (
-        <div>
-           <Search />
-          <Filter setIsFiltered={setIsFiltered} isFiltered={isFiltered} />
-          <Order isFiltered={isFiltered} breed={breed} setOrder={setOrder}/>
-          <h1>Breed does not exist...</h1>
-        </div>
-        )
-    }
-      if (searchBreed !== null && searchBreed.length > 0) {
+    //   return (
+    //     <div>
+    //        <Search />
+    //       <Filter setIsFiltered={setIsFiltered} isFiltered={isFiltered} />
+    //       <Order isFiltered={isFiltered} breed={breed} setOrder={setOrder}/>
+    //       <h1>Breed does not exist...</h1>
+    //     </div>
+    //     )
+    // }
+    //   if (searchBreed !== null && searchBreed.length > 0) {
         
-      return (
-        <div>
-          <Search />
-          <Filter setIsFiltered={setIsFiltered} isFiltered={isFiltered} />
-          <Order isFiltered={isFiltered} breed={breed} setOrder={setOrder}/>
-          <DisplaySearch />
-        </div>
-      );
+    //   return (
+    //     <div>
+    //       <Search />
+    //       <Filter setIsFiltered={setIsFiltered} isFiltered={isFiltered} />
+    //       <Order isFiltered={isFiltered} breed={breed} setOrder={setOrder}/>
+    //       <DisplaySearch />
+    //     </div>
+    //   );
     
-    }
-    else {
-      return (
-        <div>
-          <Search />
-          <Filter setIsFiltered={setIsFiltered} isFiltered={isFiltered} />
-          <Order isFiltered={isFiltered} breed={breed} setOrder={setOrder} />
-          <DisplayBreeds
-            breeds={breed}
-            pagesVisited={pagesVisited}
-            breedsPerPage={breedsPerPage}
-            paginate={paginate}
-          />
-        </div>
-      );
-    }
+    // }
+    // else {
+    //   return (
+    //     <div>
+    //       <Search />
+    //       <Filter setIsFiltered={setIsFiltered} isFiltered={isFiltered} />
+    //       <Order isFiltered={isFiltered} breed={breed} setOrder={setOrder} />
+    //       <DisplayBreeds
+    //         breeds={breed}
+    //         pagesVisited={pagesVisited}
+    //         breedsPerPage={breedsPerPage}
+    //         paginate={paginate}
+    //       />
+    //     </div>
+    //   );
+    // }
 
   } else {
     return (
-      <h1>
+      <h1 className='loading'>
         Loading...
       </h1>
     )

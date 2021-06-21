@@ -25,8 +25,9 @@ export function orderByAlpha(Alpha, array) {
 
     if (Ascendent) {
         for (let i = 0; i < array.length - 1; i++) {
+          
             for (let j = i + 1; j < array.length; j++) {
-                if (array[i].weight > array[j].weight) {
+                if (parseFloat(array[i].weight) > parseFloat(array[j].weight)) {
                     [array[i], array[j]] = [array[j], array[i]];
                 }
             }
@@ -35,7 +36,7 @@ export function orderByAlpha(Alpha, array) {
     } else {
         for (let i = 0; i < array.length - 1; i++) {
             for (let j = i + 1; j < array.length; j++) {
-                if (array[i].weight < array[j].weight) {
+                if (parseFloat(array[i].weight) < parseFloat(array[j].weight)) {
                     [array[i], array[j]] = [array[j], array[i]];
                 }
             }

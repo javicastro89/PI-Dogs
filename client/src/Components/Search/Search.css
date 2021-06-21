@@ -1,0 +1,24 @@
+.searchIco {
+    width: 30px;
+    height: 30px;
+    margin: 7px;
+    color: var(--btn-color);
+}
+
+.divContainer {
+    display: flex;
+    justify-content: center;
+}
+
+#search {
+    height: 15px;
+    margin: 10px 0px 10px;
+    border: .5px solid var(--border);
+    border-radius: 10px;
+    padding: 3px 5px;
+}
+
+#search:focus {
+    outline: none;
+    border: 1px solid var(--btn-color-active);
+}
