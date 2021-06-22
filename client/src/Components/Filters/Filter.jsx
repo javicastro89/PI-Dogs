@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getTemperament } from "../../Actions";
 
+import "./Filter.css";
+
 function Filter({ setIsFiltered, isFiltered }) {
   const dispatch = useDispatch();
   const breeds = useSelector((state) => state.breeds);
@@ -12,29 +14,27 @@ function Filter({ setIsFiltered, isFiltered }) {
     breed: "",
   });
   const [filter, setFilter] = useState(false);
-  let [tempFilter, setTempFilter] = useState([])
+  let [tempFilter, setTempFilter] = useState([]);
 
   function filterByTemperament(tempFilter) {
-    if(tempFilter.length === 0) {
-      return false
+    if (tempFilter.length === 0) {
+      return false;
     }
 
     if (breeds.length > 0) {
       let filteredTemp = breeds.filter((objBreed) => {
-
         if (objBreed.temperament) {
           objBreed.temperament.split(", ");
-          let flag = true
-          for(let i of tempFilter) {
-
-            if(!objBreed.temperament.includes(i)) {
-              flag = false
-              break
+          let flag = true;
+          for (let i of tempFilter) {
+            if (!objBreed.temperament.includes(i)) {
+              flag = false;
+              break;
             }
           }
 
-          if(flag){
-            return objBreed
+          if (flag) {
+            return objBreed;
           }
         }
         return null;
@@ -45,7 +45,9 @@ function Filter({ setIsFiltered, isFiltered }) {
 
   function filterByBreed(breed) {
     if (isFiltered.arrayFilter.length > 0) {
-      return isFiltered.arrayFilter.filter(objBreed => objBreed.name === breed);
+      return isFiltered.arrayFilter.filter(
+        (objBreed) => objBreed.name === breed
+      );
     }
     return breeds.filter((objBreed) => objBreed.name === breed);
   }
@@ -60,13 +62,12 @@ function Filter({ setIsFiltered, isFiltered }) {
       let find = temperament.find((e) => e.name === event.target.value);
 
       if (find) {
-        tempFilter.push(find.name)
-        let newFilter = filterByTemperament(tempFilter)
+        tempFilter.push(find.name);
+        let newFilter = filterByTemperament(tempFilter);
         setIsFiltered({
           filter: true,
           arrayFilter: newFilter,
         });
-
       } else {
         let newFilter = filterByBreed(event.target.value);
         setIsFiltered({
@@ -74,19 +75,17 @@ function Filter({ setIsFiltered, isFiltered }) {
           arrayFilter: newFilter,
         });
       }
-
-    } 
-    else if (event.target.name === 'breed') {
-      let flag = filterByTemperament(tempFilter)
+    } else if (event.target.name === "breed") {
+      let flag = filterByTemperament(tempFilter);
       if (!flag) {
         setIsFiltered({
           filter: false,
-          arrayFilter: []
+          arrayFilter: [],
         });
       } else {
         setIsFiltered({
           filter: true,
-          arrayFilter: flag
+          arrayFilter: flag,
         });
       }
     }
@@ -97,39 +96,37 @@ function Filter({ setIsFiltered, isFiltered }) {
 
     if (event.target.value === "false") {
       setFilter(true);
-
     } else {
       setFilter(false);
       setState({
         temp: "",
         breed: "",
-      })
+      });
       setIsFiltered({
         filter: false,
-        arrayFilter: []
+        arrayFilter: [],
       });
-      setTempFilter([])
+      setTempFilter([]);
     }
   }
 
   function eraseTemp(event) {
-    event.preventDefault()
-    
-    let intermediate = tempFilter.filter(e => e !== event.target.value)
-    setTempFilter(intermediate)
-    
+    event.preventDefault();
+
+    let intermediate = tempFilter.filter((e) => e !== event.target.value);
+    setTempFilter(intermediate);
+
     if (intermediate.length > 0) {
-      let newFilter = filterByTemperament(intermediate)
+      let newFilter = filterByTemperament(intermediate);
       setIsFiltered({
         filter: true,
-        arrayFilter: newFilter
-      })
-    
+        arrayFilter: newFilter,
+      });
     } else {
       setIsFiltered({
         filter: false,
-        arrayFilter: []
-      })
+        arrayFilter: [],
+      });
     }
   }
 
@@ -137,70 +134,93 @@ function Filter({ setIsFiltered, isFiltered }) {
     dispatch(getTemperament());
   }, [dispatch]);
 
-
   return (
-    <div>
-      <button name="Filter" value={filter} onClick={handleFilter}>
-        Filter
-      </button>
+    <div className="filterContainer">
+      <div className="btnContainer">
+        <button
+          name="Filter"
+          value={filter}
+          onClick={handleFilter}
+          className="btnFilter"
+        >
+          Filter
+        </button>
+      </div>
 
       {filter ? (
-
         <>
-          <label>Temperament</label>
+          <div className="filterActive">
+            <div className="divTemp">
+              <label className="label"> Temperament </label>
 
-          <select name="temp" onChange={handleChange} value={state.temp}>
-            <option></option>
-            
-            {Array.isArray(temperament) ? 
-            temperament.map(e => 
-              <option
-              name="temperament"
-              key={e.name}
-              onChange={handleChange}
-            >
-              {e.name}
-            </option>
-            )
-            : <h1>Cargando...</h1>
-          }
+              <select
+                name="temp"
+                onChange={handleChange}
+                value={state.temp}
+                className="select"
+              >
+                <option></option>
 
-          </select>
+                {Array.isArray(temperament) ? (
+                  temperament.map((e) => (
+                    <option
+                      name="temperament"
+                      key={e.name}
+                      onChange={handleChange}
+                    >
+                      {e.name}
+                    </option>
+                  ))
+                ) : (
+                  <h1>Cargando...</h1>
+                )}
+              </select>
+            </div>
 
-          {tempFilter.length > 0 ?
-          tempFilter.map(e => 
-            <label key={e}>
+            <div className="divBreed">
+              <label className="label"> Breed </label>
+
+              <select
+                name="breed"
+                onChange={handleChange}
+                value={state.breed}
+                className="select"
+              >
+                <option></option>
+
+                {isFiltered.arrayFilter.length < 1
+                  ? breeds.map((e) => (
+                      <option name="breed" key={e.id} onChange={handleChange}>
+                        {e.name}
+                      </option>
+                    ))
+                  : isFiltered.arrayFilter.map((e) => (
+                      <option name="breed" key={e.id} onChange={handleChange}>
+                        {e.name}
+                      </option>
+                    ))}
+              </select>
+            </div>
+          </div>
+          <div className="selectedTempContainer">
+            {tempFilter.length > 0 ? (
+              tempFilter.map((e) => (
+                <label key={e} className="labelTemp">
                   <label> {e} </label>
-                  <button onClick={eraseTemp} value={e}>
+                  <button
+                    onClick={eraseTemp}
+                    value={e}
+                    className="closeBtn"
+                    data-tooltip="Delete"
+                  >
                     x
                   </button>
                 </label>
-            )
-
-          : <label></label>}
-        
-          <label>Breed</label>
-
-          <select name="breed" onChange={handleChange} value={state.breed}>
-            <option></option>
-
-            {isFiltered.arrayFilter.length < 1
-
-              ? breeds.map((e) => (
-                  <option name="breed" key={e.id} onChange={handleChange}>
-                    {e.name}
-                  </option>
-                ))
-
-              : isFiltered.arrayFilter.map((e) => (
-
-                  <option name="breed" key={e.id} onChange={handleChange}>
-                    {e.name}
-                  </option>
-
-                ))}
-
-          </select>
+              ))
+            ) : (
+              <label></label>
+            )}
+          </div>
         </>
       ) : null}
     </div>

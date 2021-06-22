@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {orderByAlpha, orderByWeight} from './OrderFunctions'
+import './Order.css'
 
 function Order({ isFiltered, breed, setOrder }) {
   const [openOrder, setOpenOrder] = useState(false);
@@ -57,14 +58,17 @@ function Order({ isFiltered, breed, setOrder }) {
  
 
   return (
-    <div>
-      <button name="Order" value={openOrder} onClick={handleOrder}>
+    <div className='orderContainer'>
+      <div className='btnContainer'>
+      <button name="Order" value={openOrder} onClick={handleOrder} className='orderBtn'>
         Order
       </button>
+      </div>
       {openOrder ? 
-      <>
-      <label> Names </label>
-      <select name='Alpha' onChange={handleChange} value={state.Alpha}>
+      <div className='orderActive'>
+        <div className='divNames'>
+      <label className='label'> Names </label>
+      <select name='Alpha' onChange={handleChange} value={state.Alpha} className='select'>
           <option></option>
           <option 
           name='A-Z' 
@@ -80,8 +84,11 @@ function Order({ isFiltered, breed, setOrder }) {
           </option>
 
       </select> 
-      <label> Weight </label>
-      <select name='Weight' onChange={handleChange} value={state.Weight}>
+      </div>
+
+      <div className='divWeight'>
+      <label className='label'> Weight </label>
+      <select name='Weight' onChange={handleChange} value={state.Weight} className='select'>
           <option></option>
           <option 
           name='Ascendent' 
@@ -97,7 +104,8 @@ function Order({ isFiltered, breed, setOrder }) {
             </option>
 
       </select> 
-      </>
+      </div>
+      </div>
       : null
       }
     </div>

@@ -24,6 +24,7 @@ function Search() {
         autoComplete="off"
         value={input}
         onChange={handleChange}
+        placeholder='Search...'
       />
     </div>
   );

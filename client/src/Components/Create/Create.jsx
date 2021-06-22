@@ -128,10 +128,16 @@ function Create({setCreate}) {
     }
   }, [input, breeds])
 
+  const divTemp = {
+    'marginTop': '20px'
+  }
+
 
   return (
     <div className='container'>
+      
     <form onSubmit={handleSubmit} className='form'>
+    <div className='titleCreate'>Create Breed</div>
       <div>
         <p>Breed name</p>
         <input
@@ -146,7 +152,7 @@ function Create({setCreate}) {
       </div>
 
       <div className='fullTempContainer'>
-        <div>Temperament</div>
+        <div style={divTemp}>Temperament</div>
         <div>
           <select 
           name="temperament"
@@ -165,6 +171,7 @@ function Create({setCreate}) {
           </select>
         <button onClick={handleTemp} className='addBtn' data-tooltip='Add'>+</button>
           </div>
+
           {error.temperament && <p className='danger'>{error.temperament}</p>}     
         <div className='selectedTemp'>
           {input.temperament.length > 0
@@ -240,7 +247,7 @@ function Create({setCreate}) {
           onChange={handleInput}
         />
       </div>
-      <input type="submit" value="Crear" disabled={!submit} />
+      <input type="submit" value="Create" disabled={!submit} className={submit ? 'createBtn' : 'createBtnDisable'}/>
     </form>
     </div>
   );

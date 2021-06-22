@@ -5,11 +5,13 @@ import Logo from '../../img/dog.png'
 import './NavBar.css'
 
 function NavBar({ navBarFlag }) {
+
+  const spanStyle = {
+    color: '#718792',
+  }
+
   return navBarFlag ? (
     <>
-    {/* <div className='top'>
-    THE DOG APP
-    </div> */}
     <header className='navBar'>
       <div>
       <NavLink exact to="/home" >
@@ -18,14 +20,16 @@ function NavBar({ navBarFlag }) {
       </div>
       <nav>
         <ul className='list'>
+      
           <li className='list-item'>
             <NavLink exact to="/home" >
               Home
             </NavLink>
-
+            <span style={spanStyle}> | </span>
             <NavLink exact to="/create">
               Create Breed
             </NavLink>
+            
           </li>
         </ul>
       </nav>

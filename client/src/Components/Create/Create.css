@@ -3,23 +3,39 @@
     justify-content: center;
 }
 
+.titleCreate{
+    background-color: var(--primary-color);
+    width: 100%;
+    border-radius: 15px 15px 0px 0px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    font-size: 100%;
+    font-weight: 700;
+}
+
 .form {
-    /*Back color*/
-    background-color: var(--primary-color-dark);
+    /*Style*/
+    background-color: var(--container);
+    border: 1px solid var(--border);
+
     /*Font*/
-    color: var(--text-color);
+    color: var(--title-color);
     font-weight: 600;
     font-size: 100%;
 
     /*Position and form*/
     width: 50vw;
     max-width: 500px;
+    min-width: 300px;
     margin-top: 30px;
-    padding: 5px 10px 20px 10px;
+    padding-bottom: 20px;
     border-radius: 15px;
 }
 
 .input {
+    width: 50%;
     padding: 3px;
     border-radius: 10px;
     border: 1px solid var(--primary-color);
@@ -34,8 +50,15 @@
 .input:active{border-radius: 10px;}
 
 input.danger {
+    padding: 3px;
     border: 1px solid red;
     border-radius: 10px;
+}
+
+input.danger:focus {
+    outline: none;
+    border-radius: 10px;
+    border: 2px solid var(--primary-color-dark);
 }
 
 .select {
@@ -100,7 +123,7 @@ p.danger {
      padding-bottom: 0px;
 
       /*Style*/
-    background-color: var(--secodary-color);
+    background-color: var(--btn-color);
     border: none;
     width: 20px;
     height: 20px;
@@ -119,7 +142,7 @@ p.danger {
     align-content: center;
 
     /*Style*/
-    background-color: var(--secodary-color);
+    background-color: var(--btn-color);
     border: none;
     width: 17px;
     height: 17px;
@@ -166,4 +189,44 @@ p.danger {
 .tempSelect {
     margin: 5px;
     align-self: center;
+}
+
+.createBtn {
+      /*Style*/
+      background-color: var(--btn-color);
+      color: var(--title-color);
+      border: none;
+      border-radius: 5px;
+      font-size: 100%;
+      padding: 3px 10px;
+  
+      /*Position*/
+      margin-top: 10px;
+  
+      /*Transition*/
+      transition-property: background-color, color, font-weight;
+      transition-duration: .4s;
+}
+
+.createBtnDisable{
+    /*Style*/
+    background-color: var(--primary-color-dark);
+    color: var(--primary-color);
+    border: none;
+    border-radius: 5px;
+    font-size: 100%;
+    padding: 3px 10px;
+
+    /*Position*/
+    margin-top: 10px;
+  
+}
+
+
+
+.createBtn:hover {
+    background-color: var(--btn-color-active);
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--primary-color-dark);
 }

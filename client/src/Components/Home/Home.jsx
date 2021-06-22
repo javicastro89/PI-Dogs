@@ -52,10 +52,11 @@ function Home({create, setCreate}) {
   
   if (breeds.length > 0) {
       arrayToShow = breeds
+
     if(isFiltered.filter) {
-      console.log('Is filtered chango')
         arrayToShow = isFiltered.arrayFilter
     }
+
     if (searchBreed !== null && searchBreed.length > 0) {
         arrayToShow = searchBreed
     }
@@ -66,7 +67,7 @@ function Home({create, setCreate}) {
           <Filter setIsFiltered={setIsFiltered} isFiltered={isFiltered}/>
           <Order isFiltered={isFiltered} breed={arrayToShow} setOrder={setOrder}/>
 
-          {searchBreed === null ? <h1>Breed does not exist</h1> : <Dislpay 
+          {searchBreed === null ? <h1 className='loading'>Breed does not exist</h1> : <Dislpay 
           pagesVisited={pagesVisited}
           breedsPerPage={breedsPerPage}
           paginate={paginate}
@@ -74,44 +75,6 @@ function Home({create, setCreate}) {
           breeds={arrayToShow} />}
         </div>
       )
-    //  if (searchBreed === null) {
-      
-    //   return (
-    //     <div>
-    //        <Search />
-    //       <Filter setIsFiltered={setIsFiltered} isFiltered={isFiltered} />
-    //       <Order isFiltered={isFiltered} breed={breed} setOrder={setOrder}/>
-    //       <h1>Breed does not exist...</h1>
-    //     </div>
-    //     )
-    // }
-    //   if (searchBreed !== null && searchBreed.length > 0) {
-        
-    //   return (
-    //     <div>
-    //       <Search />
-    //       <Filter setIsFiltered={setIsFiltered} isFiltered={isFiltered} />
-    //       <Order isFiltered={isFiltered} breed={breed} setOrder={setOrder}/>
-    //       <DisplaySearch />
-    //     </div>
-    //   );
-    
-    // }
-    // else {
-    //   return (
-    //     <div>
-    //       <Search />
-    //       <Filter setIsFiltered={setIsFiltered} isFiltered={isFiltered} />
-    //       <Order isFiltered={isFiltered} breed={breed} setOrder={setOrder} />
-    //       <DisplayBreeds
-    //         breeds={breed}
-    //         pagesVisited={pagesVisited}
-    //         breedsPerPage={breedsPerPage}
-    //         paginate={paginate}
-    //       />
-    //     </div>
-    //   );
-    // }
 
   } else {
     return (

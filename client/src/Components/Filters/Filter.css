@@ -1,0 +1,133 @@
+.filterContainer {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.btnFilter {
+    background-color: var(--btn-color);
+    color: var(--title-color);
+    border: none;
+    border-radius: 5px;
+    font-size: 100%;
+    padding: 3px 10px;
+
+    /*Position*/
+    margin: 10px;
+
+     /*Transition*/
+     transition-property: background-color, color, font-weight;
+     transition-duration: .4s;
+}
+
+.btnFilter:hover {
+    background-color: var(--btn-color-active);
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--primary-color-dark);
+}
+
+.label {
+    color: var(--title-color);
+    font-size: 100%;
+    font-weight: 600;
+        
+}
+
+.select {
+    padding: 3px;
+    width: 125px;
+    max-width: 100%; 
+    border: 1px solid var(--primary-color);
+    border-radius: 10px;
+    box-shadow: 0 1px 0 1px rgba(0,0,0,.03);
+
+}
+
+.select:focus{
+    outline: none;
+    border-radius: 10px;
+    border: 2px solid var(--primary-color-dark);
+}
+
+.closeBtn {
+      /* Position */
+      margin-left: 5px;
+      padding-bottom: 0px;
+ 
+       /*Style*/
+     background-color: var(--btn-color);
+     border: none;
+     width: 20px;
+     height: 20px;
+     border-radius: 50px;
+     color: var(--text-color);
+     cursor: pointer;
+     font-size: 100%;
+     font-weight: 500;
+}
+
+[data-tooltip] {
+    position: relative;
+    border-bottom: 1px dotted #09C;
+    cursor:pointer;
+    
+}
+
+[data-tooltip]::before{
+    content: attr(data-tooltip);
+    background-color:rgba(0,0,0,.75);
+    color:white;
+    width: 50px;
+    padding: 5px;
+    height: auto;
+    border-radius: 3px;
+    display: none;
+    position: absolute;
+    top: 30px;
+    pointer-events: none;
+    font-size: 100%;
+    font-weight: 500;
+}
+
+[data-tooltip]:hover::before {
+    display: block;
+}
+
+.selectedTempContainer {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    margin-bottom: 20px;
+}
+
+.filterActive {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.divTemp {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin-right: 20px;
+}
+
+.divBreed {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin-left: 20px;
+}
+
+.labelTemp {
+    /*Style*/
+    color: var(--title-color);
+    font-size: 100%;
+    font-weight: 600;
+
+    /*Position*/
+    margin-left: 10px;
+    margin-right: 10px;
+}
