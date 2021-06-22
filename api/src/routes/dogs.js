@@ -361,7 +361,7 @@ router.post('/dog', (req, res) => {
                 }
                 return res.json(newBreed)
             })
-            .catch(() => res.status(500).json({ error: 'Ups!!' }))
+            .catch(() => res.status(500).json({ error: 'Error en la reques a la API' }))
 
     } else {
         return res.status(400).json({ error: 'Debes incluir todos los campos para crear la raza.' })

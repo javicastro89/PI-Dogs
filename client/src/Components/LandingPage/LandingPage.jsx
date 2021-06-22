@@ -19,12 +19,14 @@ function LandingPage({ handler }) {
 
   return (
     <div className='landingContainer'>
+      <h1 className='welcomePhone'>Welcome to the "Dog App"</h1>
+      <h3 className='subtitlePhone'>Find information on more than 150 breeds of dogs</h3>
       <div className='picContainer'>
       <img src={Landing1} alt='Dog img' className='landingPic'/>
       </div>
       <div className='divWelcome'>
       <h1 className='welcome'>Welcome to the "Dog App"</h1>
-      <h3 className='subtitle'>Where you can find information on more than 150 breeds of dogs</h3>
+      <h3 className='subtitlePC'>Find information on more than 150 breeds of dogs</h3>
       <button onClick={handleClick} className='enterBtn'>Enter to the site</button>
       </div>
       

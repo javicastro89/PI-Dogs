@@ -29,6 +29,7 @@
     flex-flow: row;
     align-items: center;
     height: 100%;
+    margin-right: 10px;
 }
 
 
@@ -41,5 +42,9 @@
 
 .list a:hover {
     color: var(--primary-color);
+}
+
+@media (max-width: 500px) {
+    .list{margin-right: 0px;}
 }
 

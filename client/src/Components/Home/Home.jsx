@@ -18,12 +18,12 @@ function Home({create, setCreate}) {
     arrayFilter: []
   })
   const [order, setOrder] = useState(false);
+  const [searching, setSearching] = useState(false)
   
   
 
   // Change page
   const paginate = (event) => {
-    // event.preventDefault();
     setPageNumber(event);
   };
 
@@ -54,16 +54,17 @@ function Home({create, setCreate}) {
       arrayToShow = breeds
 
     if(isFiltered.filter) {
+      console.log('Esta filtrado')
         arrayToShow = isFiltered.arrayFilter
     }
 
-    if (searchBreed !== null && searchBreed.length > 0) {
+    if (searching && searchBreed !== null &&  searchBreed.length > 0) {
         arrayToShow = searchBreed
     }
     
       return (
         <div className='primaryDiv'>
-          <Search />
+          <Search setSearching={setSearching} />
           <Filter setIsFiltered={setIsFiltered} isFiltered={isFiltered}/>
           <Order isFiltered={isFiltered} breed={arrayToShow} setOrder={setOrder}/>
 

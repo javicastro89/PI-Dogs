@@ -65,3 +65,10 @@ export function clearDetail(){
         payload: undefined
     }
 }
+
+export function clearSearch() {
+    return {
+        type: SEARCH_BREEDS,
+        payload: undefined
+    }
+}

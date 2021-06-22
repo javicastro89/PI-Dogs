@@ -27,7 +27,7 @@ function NavBar({ navBarFlag }) {
             </NavLink>
             <span style={spanStyle}> | </span>
             <NavLink exact to="/create">
-              Create Breed
+              Create
             </NavLink>
             
           </li>
