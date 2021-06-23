@@ -54,8 +54,7 @@ function Home({create, setCreate}) {
       arrayToShow = breeds
 
     if(isFiltered.filter) {
-      console.log('Esta filtrado')
-        arrayToShow = isFiltered.arrayFilter
+      arrayToShow = isFiltered.arrayFilter
     }
 
     if (searching && searchBreed !== null &&  searchBreed.length > 0) {

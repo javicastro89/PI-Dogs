@@ -50,10 +50,6 @@ function Create({setCreate}) {
     if (temp !== "") {
       if (!input.temperament.find((e) => e === temp)) {
         input.temperament.push(temp)
-        // setInput({
-        //   ...input,
-        //   temperament: [...input.temperament, temp],
-        // });
         setTemp("");
       }
     }

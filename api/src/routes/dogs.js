@@ -265,9 +265,26 @@ router.get('/dogs/:idRaza', (req, res) => {
                 return res.json(dogExt)
             }
 
-            Breed.findByPk(parseInt(idRaza))
+            Breed.findByPk(parseInt(idRaza), {
+                include: [Temperament]
+            })
                 .then(result => {
-                    if (result) return res.json(result)
+                    if (result) {
+                        let temp = result.Temperaments.map(t => {
+                            return t.dataValues.name
+                        })
+                        let dogInt = {
+                        name: result.name,
+                        temperament: temp.join(', '),
+                        height: result.height,
+                        weight: result.weight,
+                        life_span: result.life_span,
+                        id: result.id,
+                        image: result.image
+                        }
+
+                        return res.json(dogInt)
+                    }
                     return res.status(400).json({ error: `No existe raza con el id: ${idRaza}` })
                 })
 
@@ -340,7 +357,7 @@ router.post('/dog', (req, res) => {
                     defaults: {
                         height: height,
                         weight: weight,
-                        life_span: life_span,
+                        life_span: life_span + ' years',
                         id: id++,
                         description: description,
                         image: pic.data.message

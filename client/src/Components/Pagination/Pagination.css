@@ -21,7 +21,7 @@
     padding: 7px;
 
     /*Style*/
-    border: 1px solid var(--border);
+    border: 1.5px solid var(--border);
     cursor: pointer;
     background-color: var(--body);
     color: var(--text-color);

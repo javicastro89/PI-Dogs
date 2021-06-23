@@ -16,6 +16,8 @@ function Detail() {
     return () => dispatch(clearDetail());
   }, [dispatch, id]);
 
+  console.log(breedDetail)
+
   if (breedDetail === null) {
     return <h1 className="loading">Breed don't exist</h1>;
   } else if (breedDetail === undefined) {
@@ -31,12 +33,20 @@ function Detail() {
           <div className="dataContainer">
             <h6>Temperament</h6>
             <h3 className="arrayTemp">{breedDetail.temperament}</h3>
-            <h6>Height</h6>
+            <div className='heightWeight'>
+              <div>
+            <h6>Heigh Average</h6>
             <h3>{breedDetail.height} cm</h3>
+            </div>
+            <div>
             <h6>Weight Average</h6>
             <h3>{breedDetail.weight} kg</h3>
+            </div>
+            <div>
             <h6>Life Span</h6>
             <h3>{breedDetail.life_span}</h3>
+            </div>
+            </div>
           </div>
         </div>
       </div>
