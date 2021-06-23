@@ -35,15 +35,15 @@ function Detail() {
             <h3 className="arrayTemp">{breedDetail.temperament}</h3>
             <div className='heightWeight'>
               <div>
-            <h6>Heigh Average</h6>
+            <h6>Average height</h6>
             <h3>{breedDetail.height} cm</h3>
             </div>
             <div>
-            <h6>Weight Average</h6>
+            <h6>Average weight</h6>
             <h3>{breedDetail.weight} kg</h3>
             </div>
             <div>
-            <h6>Life Span</h6>
+            <h6>Life span</h6>
             <h3>{breedDetail.life_span}</h3>
             </div>
             </div>
