@@ -20,8 +20,10 @@ function Detail() {
 
   if (breedDetail === null) {
     return <h1 className="loading">Breed don't exist</h1>;
+    
   } else if (breedDetail === undefined) {
     return <h1 className="loading">Loading...</h1>;
+
   } else {
     return (
       <div className="container">

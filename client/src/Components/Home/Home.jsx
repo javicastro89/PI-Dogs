@@ -58,7 +58,8 @@ function Home({create, setCreate}) {
     }
 
     if (searching && searchBreed !== null &&  searchBreed.length > 0) {
-        arrayToShow = searchBreed
+      arrayToShow = searchBreed
+        
     }
     
       return (

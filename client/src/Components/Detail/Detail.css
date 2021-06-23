@@ -74,3 +74,10 @@ h3 {
     margin: 0px;
     color: var(--text-color);
 }
+
+@media (max-width: 850px) {
+    .heightWeight {
+        flex-direction: column;
+        margin-top: 0px;
+    }
+}

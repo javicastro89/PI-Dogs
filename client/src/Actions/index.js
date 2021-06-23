@@ -65,3 +65,10 @@ export function clearDetail(){
         payload: undefined
     }
 }
+
+export function searchLocalBreeds(array){
+    return {
+        type: SEARCH_BREEDS,
+        payload: array
+    }
+}

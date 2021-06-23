@@ -16,10 +16,6 @@ code {
   --primary-color: #455a64;
   --primary-color-light: #718792;
   --primary-color-dark: #1c313a;
-  --secodary-color: #1b5e20;
-  --secodary-color-light: #4c8c4a;
-  --secodary-color-dark: #003300;
-  /* --text-color: #ffffff; */
   --background-card: #eeeeee;
   /*Nuevos colores*/
   --body: #192229;
@@ -31,4 +27,8 @@ code {
   --btn-color: #1e5179;
   --btn-color-active: #52A5E0;
   --subtitle: #224c6a;
+  --color-green: #00a878;
+  --color-red: #fe5e41;
+  --color-button: #fdffff;
+  --color-black: #000;
 }
