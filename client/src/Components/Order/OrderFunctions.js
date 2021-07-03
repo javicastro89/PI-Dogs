@@ -43,3 +43,26 @@ export function orderByAlpha(Alpha, array) {
         }
     }
   }
+
+  export function orderByLife(Ascendent, array) {
+
+    if (Ascendent) {
+        for (let i = 0; i < array.length - 1; i++) {
+          
+            for (let j = i + 1; j < array.length; j++) {
+                if (parseFloat(array[i].life_span) > parseFloat(array[j].life_span)) {
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+            }
+        }
+        
+    } else {
+        for (let i = 0; i < array.length - 1; i++) {
+            for (let j = i + 1; j < array.length; j++) {
+                if (parseFloat(array[i].life_span) < parseFloat(array[j].life_span)) {
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+            }
+        }
+    }
+  }
