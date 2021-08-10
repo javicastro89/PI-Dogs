@@ -25,9 +25,10 @@ const axios = require('axios').default;
 
 // Syncing all the models at once.
 conn.sync({ force: true }).then(() => {
-  server.listen(3001, () => {
-    console.log('%s listening at 3001'); // eslint-disable-line no-console
-
+  // server.listen(3001, () => {
+  //   console.log('%s listening at 3001'); // eslint-disable-line no-console
+  server.listen(process.env.PORT, () => {
+    console.log("%s listening at 3000"); // eslint-disable-line no-console
     // Cargar los temperamentos de la base de datos apenas se sincroniza
     axios.get('https://api.thedogapi.com/v1/breeds')
       .then(result => {
