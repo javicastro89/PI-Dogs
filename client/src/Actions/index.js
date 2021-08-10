@@ -4,7 +4,7 @@ import axios from 'axios'
 
 export function getBreeds() {
     return function (dispatch) {
-        axios.get('http://localhost:3001/dogs')
+        axios.get('/dogs')
             .then(result => dispatch({
                 type: GET_BREEDS,
                 payload: result.data
@@ -15,7 +15,7 @@ export function getBreeds() {
 
 export function getBreedDetail(id) {
     return function (dispatch) {
-        axios.get(`http://localhost:3001/dogs/${id}`)
+        axios.get(`/dogs/${id}`)
             .then(result => dispatch({
                 type: GET_BREED_DETAIL,
                 payload: result.data
@@ -25,7 +25,7 @@ export function getBreedDetail(id) {
 
 export function addBreed(payload) {
     return function (dispatch) {
-        axios.post('http://localhost:3001/dog', payload)
+        axios.post('/dog', payload)
         .then(result => dispatch({
             type: ADD_BREED,
             payload: result.data
@@ -35,7 +35,7 @@ export function addBreed(payload) {
 
 export function getTemperament() {
     return function (dispatch) {
-        axios.get('http://localhost:3001/temperament')
+        axios.get('/temperament')
         .then(result => dispatch({
             type: GET_TEMPERAMENT,
             payload: result.data
@@ -45,7 +45,7 @@ export function getTemperament() {
 
 export function searchBreeds(name){
     return function(dispatch) {
-        axios.get(`http://localhost:3001/dogs?name=${name}`)
+        axios.get(`/dogs?name=${name}`)
         .then(result => dispatch({
             type: SEARCH_BREEDS,
             payload: result.data
