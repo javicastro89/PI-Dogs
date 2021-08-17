@@ -117,7 +117,7 @@ function Order({ isFiltered, breed, setOrder }) {
       </select> 
       </div>
 
-      <div className='divWeight'>
+      <div className='divLifeSpan'>
       <label className='label'> Life Span </label>
       <select name='Life_span' onChange={handleChange} value={state.Life_span} className='select'>
           <option></option>

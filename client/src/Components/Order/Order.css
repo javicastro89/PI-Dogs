@@ -2,6 +2,7 @@
     display: flex;
     justify-content: center;
     flex-direction: column;
+    align-items: center;
 }
 
 .orderBtn {
@@ -52,19 +53,30 @@
 
 .orderActive {
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    width: 50vw;
+    min-width: 350px;
 }
 
 .divNames {
     display: flex;
     justify-content: center;
     flex-direction: column;
-    margin-right: 20px;
+    /* margin-right: 20px; */
 }
 
 .divWeight {
     display: flex;
     justify-content: center;
     flex-direction: column;
-    margin-left: 20px;
+    /* margin-left: 20px; */
+}
+
+
+.divLifeSpan {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    /* margin-left: 20px; */
 }
