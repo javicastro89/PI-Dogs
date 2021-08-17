@@ -1,6 +1,5 @@
 import React from 'react'
 import Pagination from '../Pagination/Pagination'
-// import { Link } from 'react-router-dom'
 import { useHistory } from 'react-router'
 
 import './Display.css'
@@ -23,7 +22,7 @@ export default function Dislpay({ pagesVisited, breedsPerPage, paginate, breeds 
              {breed.name} 
             </h4>
             </div>
-            <img src={breed.image} alt="Foto raza" className="dogPic" />
+            <img src={breed.image} alt="Breed" className="dogPic" />
             <h6 className='temp'>{breed.temperament}</h6>
             <button onClick={handleSubmit} value={breed.id} className='buttonDetail'> Detail </button>
           </div>
